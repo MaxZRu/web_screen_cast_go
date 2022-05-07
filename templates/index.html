@@ -1,0 +1,48 @@
+{{ define "index" }}
+<html dir=ltr lang=ru-ru><head><title>Демонстрация экрана {{.Display}}</title><style type="text/css">
+    body { background:steelblue}
+    h1 {color:white}
+    img {border:2px solid black;}
+    </style>
+    <script language="JavaScript">
+    var oldw=640,oldh=480;
+    function refreshIt() {
+        if (!document.images) return;
+        document.images['screen'].src = 'screen.jpg?display={{.Display}}&rand=' + Math.random();
+        e= document.getElementById("scale");
+        if(e.checked) { 
+            document.images['screen'].width=document.body.clientWidth-30;
+            document.images['screen'].height=document.body.clientHeight-30;
+        }
+        else
+        {
+            document.images['screen'].width=oldw;
+            document.images['screen'].height=oldh;
+        } 
+
+        e = document.getElementById("time");
+        setTimeout('refreshIt()',e.value); // refresh every 5 secs
+    }</script>
+    </head><body onLoad=" setTimeout('refreshIt()',300)">
+    <h3 align='center'>Refresh: 
+    <select  id="time" >
+        <option value="100">100 ms</option>
+        <option value="300" selected="selected">300 ms</option>
+        <option value="500">500 ms</option>
+        <option value="1000">1 second</option>
+        <option value="2000">2 seconds</option>
+        <option value="3000">3 seconds</option>
+        <option value="4000">4 seconds</option>
+        <option value="5000">5 seconds</option>
+        <option value="10000">10 seconds</option>
+        <option value="30000">30 seconds</option>
+    </select>
+    ms&nbsp;&nbsp;Scale: <input type="checkbox" name="scale" id="scale" value="1" /></h3><br>
+    <img name="screen" src="screen.jpg"></img>
+    <script language="JavaScript">
+        document.images['screen'].onload=function(){
+         oldw = document.images['screen'].width;
+         oldh=document.images['screen'].height;
+         document.images['screen'].onload=null};
+    </script></body></html>
+{{ end }}
